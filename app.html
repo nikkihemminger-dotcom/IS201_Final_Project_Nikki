@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<!-- Nikki Hemminger | IS 201 Final Project | Recipe Roulette | April 2026 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Roulette - Nikki Hemminger</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(180deg, #b85c2a 0%, #d8844e 100%);
+      color: #fffaf0;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.25);
+      padding: 14px 20px;
+      text-align: center;
+      border-bottom: 2px solid #e8dcc5;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #fffaf0;
+      letter-spacing: 1px;
+      font-weight: 900;
+    }
+
+    header .tagline {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      font-style: italic;
+      color: #f6efe4;
+    }
+
+    header a {
+      color: #e8dcc5;
+      font-size: 13px;
+      text-decoration: none;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    header a:hover { text-decoration: underline; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-radius: 14px;
+      padding: 32px 28px;
+      backdrop-filter: blur(6px);
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .label {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+      color: #f6efe4;
+      opacity: 0.85;
+      margin: 16px 0 6px 0;
+    }
+
+    .slot {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      min-height: 44px;
+      color: #fffaf0;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.5px;
+    }
+
+    .slot.spinning {
+      opacity: 0.5;
+      filter: blur(1px);
+    }
+
+    .meal-line {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 22px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      line-height: 1.5;
+      min-height: 60px;
+    }
+
+    button.spin {
+      margin-top: 28px;
+      padding: 14px 36px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #b85c2a;
+      background: #fffaf0;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button.spin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    button.spin:active { transform: translateY(0); }
+
+    button.spin:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .history {
+      margin-top: 32px;
+      width: 100%;
+    }
+
+    .history h3 {
+      color: #fffaf0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      padding-bottom: 6px;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+    }
+
+    .history li {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      font-size: 14px;
+      color: #f6efe4;
+    }
+
+    .history li:empty { display: none; }
+
+    footer {
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 250, 240, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #fffaf0;
+      text-decoration: none;
+      margin: 0 6px;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 500px) {
+      .slot { font-size: 24px; }
+      header h1 { font-size: 22px; }
+      .card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Recipe Roulette</h1>
+    <div class="tagline">Spin to pick tonight's dinner - Nikki Hemminger</div>
+    <a href="index.html">&larr; Back to Resume</a>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="label">Protein</div>
+      <div class="slot" id="slot-protein">-</div>
+
+      <div class="label">Cuisine</div>
+      <div class="slot" id="slot-cuisine">-</div>
+
+      <div class="label">Twist</div>
+      <div class="slot" id="slot-twist">-</div>
+
+      <div class="meal-line" id="meal-line">Press spin to get tonight's meal idea.</div>
+
+      <button class="spin" id="spin-btn">Spin</button>
+    </div>
+
+    <div class="history">
+      <h3>Recent spins</h3>
+      <ul id="history-list"></ul>
+    </div>
+  </main>
+
+  <footer>
+    Nikki Hemminger &middot; IS 201 Final Project &middot;
+    <a href="index.html">Resume</a> |
+    <a href="projects.html">Projects</a> |
+    <a href="scratch.html">Running Page</a>
+  </footer>
+
+  <script>
+    const PROTEINS = [
+      "Chicken thighs", "Salmon", "Ground beef", "Tofu", "Shrimp",
+      "Pork tenderloin", "Chickpeas", "Steak", "Eggs", "Turkey",
+      "White fish", "Black beans", "Lentils", "Halloumi", "Sausage"
+    ];
+
+    const CUISINES = [
+      "Italian", "Mexican", "Thai", "Mediterranean", "American comfort",
+      "Japanese", "Korean", "Indian", "Greek", "French bistro",
+      "Vietnamese", "Tex-Mex", "Middle Eastern", "Cajun", "Chinese"
+    ];
+
+    const TWISTS = [
+      "one-pan sheet bake", "grilled with a citrus glaze", "in a warm grain bowl",
+      "stuffed into tacos", "over a crunchy slaw", "tossed into pasta",
+      "on flatbread with yogurt", "in a rice bowl with quick-pickled veg",
+      "over roasted sweet potatoes", "wrapped in lettuce cups",
+      "folded into a fluffy omelet", "on crusty bread with aioli",
+      "in a coconut-milk curry", "over creamy polenta", "stir-fried with garlic"
+    ];
+
+    const slotProtein = document.getElementById('slot-protein');
+    const slotCuisine = document.getElementById('slot-cuisine');
+    const slotTwist = document.getElementById('slot-twist');
+    const mealLine = document.getElementById('meal-line');
+    const spinBtn = document.getElementById('spin-btn');
+    const historyList = document.getElementById('history-list');
+
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    function spin() {
+      spinBtn.disabled = true;
+      spinBtn.textContent = 'Spinning...';
+      mealLine.textContent = '...';
+
+      slotProtein.classList.add('spinning');
+      slotCuisine.classList.add('spinning');
+      slotTwist.classList.add('spinning');
+
+      let tick = 0;
+      const ticker = setInterval(() => {
+        slotProtein.textContent = pick(PROTEINS);
+        slotCuisine.textContent = pick(CUISINES);
+        slotTwist.textContent = pick(TWISTS);
+        tick++;
+        if (tick > 14) {
+          clearInterval(ticker);
+          const finalProtein = pick(PROTEINS);
+          const finalCuisine = pick(CUISINES);
+          const finalTwist = pick(TWISTS);
+          slotProtein.textContent = finalProtein;
+          slotCuisine.textContent = finalCuisine;
+          slotTwist.textContent = finalTwist;
+          slotProtein.classList.remove('spinning');
+          slotCuisine.classList.remove('spinning');
+          slotTwist.classList.remove('spinning');
+
+          const meal = `${finalCuisine} ${finalProtein.toLowerCase()} ${finalTwist}.`;
+          mealLine.textContent = 'Tonight: ' + meal;
+
+          const li = document.createElement('li');
+          li.textContent = meal;
+          historyList.prepend(li);
+          while (historyList.children.length > 5) {
+            historyList.removeChild(historyList.lastChild);
+          }
+
+          spinBtn.disabled = false;
+          spinBtn.textContent = 'Spin again';
+        }
+      }, 70);
+    }
+
+    spinBtn.addEventListener('click', spin);
+  </script>
+
+</body>
+</html>
